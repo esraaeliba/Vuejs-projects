@@ -16,7 +16,7 @@
                 <option value="Admin">Admin</option>
                 <option value="User">User</option>
             </select>
-            <button  class="btn btn-primary submit-button" @click="createUser">Submit</button>
+            <button  class="btn btn-primary done" @click.prevent="createUser">Submit</button>
         </div>
     </form>
 
@@ -46,7 +46,7 @@
         align-items: center;
         height: 233px;
     }
-    .submit-button{
+    .done{
             background:black !important;
             color:white;
                 border-radius: 22px;
