@@ -1,0 +1,81 @@
+import axios from 'axios';
+
+export default{
+    data(){
+        return{
+            count:0,
+            id:'',
+            prd:{},
+            products:[],
+            title:"",
+            brand:"",
+            description:"",
+            price:0,
+
+        }
+    },
+    created() {
+        this.id=this.$route.params.id;
+        this.GetProductById();
+        if(this.id){
+            this.GetProductByIdToUpdate();
+        }
+    },
+    mounted(){
+        this.GetAllProducts();
+    },
+    methods:{
+        IncCount(){
+            ++this.count
+        },
+        GetProductById(){
+            axios.get(`http://localhost:2000/products/${this.id}`)
+            .then(res=>this.prd=res.data)
+            .catch(err=>console.log(err));
+        },
+            GetAllProducts(){
+                axios.get("http://localhost:2000/products")
+                .then(res=>{console.log(res.data);
+                this.products = res.data;
+                }).catch(err=>console.log(err));
+            },
+            Handledelete(id){
+                axios.delete(`http://localhost:2000/products/${id}`)
+                .then(res=>console.log(res,"deleted successfully"))
+                .catch(err=>console.log(err))
+                this.GetAllProducts();
+            },
+            HandlePostRequest(){
+                axios.post("http://localhost:2000/products",{
+                    title:this.title,
+                    price:this.price,
+                    brand:this.brand,
+                    description:this.description
+                })
+                .then(res=>console.log(res))
+                .catch(err=>console.log(err))
+                this.$router.push("/products")
+            },
+             GetProductByIdToUpdate(){
+                axios.get(`http://localhost:2000/products/${this.id}`)
+                .then(p=>{
+                    this.title=p.data.title,
+                    this.price=p.data.price,
+                    this.brand=p.data.brand,
+                    this.description=p.data.description
+                })
+            },
+            HandlePutRequest(){
+                axios.put(`http://localhost:2000/products/${this.id}`,{
+                    title:this.title,
+                    price:this.price,
+                    brand:this.brand,
+                    description:this.description
+                })
+                .then(res=>{
+                    console.log(res)
+                    this.$router.push("/products")
+                })
+            }
+    }
+}
